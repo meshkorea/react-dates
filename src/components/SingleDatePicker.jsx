@@ -162,15 +162,7 @@ class SingleDatePicker extends React.Component {
       onFocusChange,
       onClose,
     } = this.props;
-    const escaped = dateString.replace(/\D/g, '');
-    const formattedString = [
-      escaped.slice(0, 4),
-      escaped.slice(4, 2),
-      escaped.slice(6, 2),
-    ]
-      .filter(x => x)
-      .join('-');
-    const newDate = toMomentObject(formattedString, this.getDisplayFormat());
+    const newDate = toMomentObject(dateString, this.getDisplayFormat());
 
     const isValid = newDate && !isOutsideRange(newDate);
     if (isValid) {
