@@ -37,7 +37,7 @@ Ensure packages are installed with correct version numbers by running:
   Which produces and runs a command like:
 
   ```sh
-  npm install --save react-dates moment@>=#.## react@>=#.## react-dom@>=#.## react-addons-shallow-compare@>=#.##
+  npm install --save react-dates moment@>=#.## react@>=#.## react-dom@>=#.##
   ```
 
 ### Initialize
@@ -46,6 +46,8 @@ import 'react-dates/initialize';
 ```
 
 As of v13.0.0 of `react-dates`, this project relies on `react-with-styles`. If you want to continue using CSS stylesheets and classes, there is a little bit of extra set-up required to get things going. As such, you need to import `react-dates/initialize` to set up class names on our components. This import should go at the top of your application as you won't be able to import any `react-dates` components without it.
+
+Note: This component assumes `box-sizing: border-box` is set globally in your page's CSS.
 
 ### Include component
 ```js
@@ -64,13 +66,13 @@ Create a CSS file with the contents of `require.resolve('react-dates/lib/css/_da
 To see this in action, you can check out https://github.com/majapw/react-dates-demo which adds `react-dates` on top of a simple `create-react-app` setup.
 
 #### Overriding styles
-Right now, the easiest way to tweak `react-dates` to your heart's contents is to create another stylesheet to override the default react-dates styles. For example, you could create a file named `react_dates_overrides.css` with the following contents:
+Right now, the easiest way to tweak `react-dates` to your heart's content is to create another stylesheet to override the default react-dates styles. For example, you could create a file named `react_dates_overrides.css` with the following contents:
 
 ```css
 .CalendarDay__highlighted_calendar {
   background: #82E0AA;
   color: #186A3B;
-} 
+}
 
 .CalendarDay__highlighted_calendar:hover {
   background: #58D68D;
@@ -83,7 +85,7 @@ Right now, the easiest way to tweak `react-dates` to your heart's contents is to
 }
 ```
 
-This would override the background and text colors applied to highlighted calendar days. You can use this method with the default set-up to override any aspect of the calendar to have it better fit to your particular needs. 
+This would override the background and text colors applied to highlighted calendar days. You can use this method with the default set-up to override any aspect of the calendar to have it better fit to your particular needs.
 
 ### Make some awesome datepickers
 
@@ -101,7 +103,9 @@ Here is the minimum *REQUIRED* setup you need to get the `DateRangePicker` worki
 ```jsx
 <DateRangePicker
   startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+  startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
   endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+  endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
   onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
   focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
   onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
@@ -111,9 +115,7 @@ Here is the minimum *REQUIRED* setup you need to get the `DateRangePicker` worki
 The following is a list of other *OPTIONAL* props you may provide to the `DateRangePicker` to customize appearance and behavior to your heart's desire. Again, please explore the [storybook](http://airbnb.io/react-dates/?selectedKind=DRP%20-%20Input%20Props&selectedStory=default&full=0&down=1&left=1&panelRight=0&downPanel=kadirahq%2Fstorybook-addon-actions%2Factions-panel) for more information on what each of these props do.
 ```js
 // input related props
-startDateId: PropTypes.string.isRequired,
 startDatePlaceholderText: PropTypes.string,
-endDateId: PropTypes.string.isRequired,
 endDatePlaceholderText: PropTypes.string,
 disabled: PropTypes.bool,
 required: PropTypes.bool,
@@ -124,6 +126,10 @@ showDefaultInputIcon: PropTypes.bool,
 customInputIcon: PropTypes.node,
 customArrowIcon: PropTypes.node,
 customCloseIcon: PropTypes.node,
+noBorder: PropTypes.bool,
+block: PropTypes.bool,
+small: PropTypes.bool,
+regular: PropTypes.bool,
 
 // calendar presentation and interaction related props
 renderMonth: PropTypes.func,
@@ -148,9 +154,11 @@ navNext: PropTypes.node,
 onPrevMonthClick: PropTypes.func,
 onNextMonthClick: PropTypes.func,
 onClose: PropTypes.func,
+transitionDuration: nonNegativeInteger, // milliseconds
 
 // day presentation and interaction related props
-renderDay: PropTypes.func,
+renderCalendarDay: PropTypes.func,
+renderDayContents: PropTypes.func,
 minimumNights: PropTypes.number,
 enableOutsideDays: PropTypes.bool,
 isDayBlocked: PropTypes.func,
@@ -194,6 +202,10 @@ showClearDate: PropTypes.bool,
 customCloseIcon: PropTypes.node,
 showDefaultInputIcon: PropTypes.bool,
 customInputIcon: PropTypes.node,
+noBorder: PropTypes.bool,
+block: PropTypes.bool,
+small: PropTypes.bool,
+regular: PropTypes.bool,
 
 // calendar presentation and interaction related props
 renderMonth: PropTypes.func,
@@ -218,9 +230,11 @@ navNext: PropTypes.node,
 onPrevMonthClick: PropTypes.func,
 onNextMonthClick: PropTypes.func,
 onClose: PropTypes.func,
+transitionDuration: nonNegativeInteger, // milliseconds
 
 // day presentation and interaction related props
-renderDay: PropTypes.func,
+renderCalendarDay: PropTypes.func,
+renderDayContents: PropTypes.func,
 enableOutsideDays: PropTypes.bool,
 isDayBlocked: PropTypes.func,
 isOutsideRange: PropTypes.func,
@@ -260,15 +274,18 @@ The following is a list of other *OPTIONAL* props you may provide to the `DayPic
   renderCalendarInfo: PropTypes.func,
   onOutsideClick: PropTypes.func,
   keepOpenOnDateSelect: PropTypes.bool,
+  noBorder: PropTypes.bool,
 
   // navigation related props
   navPrev: PropTypes.node,
   navNext: PropTypes.node,
   onPrevMonthClick: PropTypes.func,
   onNextMonthClick: PropTypes.func,
+  transitionDuration: nonNegativeInteger, // milliseconds
 
   // day presentation and interaction related props
-  renderDay: PropTypes.func,
+  renderCalendarDay: PropTypes.func,
+  renderDayContents: PropTypes.func,
   minimumNights: PropTypes.number,
   isOutsideRange: PropTypes.func,
   isDayBlocked: PropTypes.func,
@@ -290,7 +307,7 @@ moment.locale('pl'); // Polish
 
 ## Advanced
 
-`react-dates` no longer relies strictly on CSS, but rather relies on `react-with-styles` as an abstraction layer between how styles are applied and how they are written. The instructions above will get the project working out of the box, but there's a lot more customization that can be done. 
+`react-dates` no longer relies strictly on CSS, but rather relies on `react-with-styles` as an abstraction layer between how styles are applied and how they are written. The instructions above will get the project working out of the box, but there's a lot more customization that can be done.
 
 ### Interfaces
 
@@ -304,7 +321,7 @@ ThemedStyleSheet.registerInterface(aphroditeInterface);
 ThemedStyleSheet.registerTheme(DefaultTheme);
 ```
 
-The above code has to be run before any `react-dates` component is imported. Otherwise, you will get an error. Also note that if you register any custom interface manually, you *must* also manually register a theme. 
+The above code has to be run before any `react-dates` component is imported. Otherwise, you will get an error. Also note that if you register any custom interface manually, you *must* also manually register a theme.
 
 ### Theming
 `react-dates` also now supports a different way to theme. You can see the default theme values in [this file](https://github.com/airbnb/react-dates/blob/master/src/theme/DefaultTheme.js) and you would override them in the following manner:
@@ -315,25 +332,27 @@ import DefaultTheme from 'react-dates/lib/theme/DefaultTheme';
 
 ThemedStyleSheet.registerInterface(aphroditeInterface);
 ThemedStyleSheet.registerTheme({
-  ...DefaultTheme,
-  color: {
-    ...DefaultTheme.color,
-    highlighted: {
-      backgroundColor: '#82E0AA',
-      backgroundColor_active: '#58D68D',
-      backgroundColor_hover: '#58D68D',
-      color: '#186A3B',
-      color_active: '#186A3B',
-      color_hover: '#186A3B',
+  reactDates: {
+    ...DefaultTheme.reactDates,
+    color: {
+      ...DefaultTheme.reactDates.color,
+      highlighted: {
+        backgroundColor: '#82E0AA',
+        backgroundColor_active: '#58D68D',
+        backgroundColor_hover: '#58D68D',
+        color: '#186A3B',
+        color_active: '#186A3B',
+        color_hover: '#186A3B',
+      },
     },
   },
 });
 ```
 
-The above code would use shades of green instead of shades of yellow for the highlight color on `CalendarDay` components. Note that you *must* register an interface if you manually register a theme. One will not work without the other. 
+The above code would use shades of green instead of shades of yellow for the highlight color on `CalendarDay` components. Note that you *must* register an interface if you manually register a theme. One will not work without the other.
 
 #### A note on using `react-with-styles-interface-css`
-The default interface that `react-dates` ships with is the [CSS interface](https://github.com/airbnb/react-with-styles-interface-css). If you want to use this interface along with the theme registration method, you will need to rebuild the core `_datepicker.css` file. We do not currently expose a utility method to build this file, but you can follow along with the code in https://github.com/airbnb/react-dates/blob/master/scripts/buildCSS.js to build your own custom themed CSS file. 
+The default interface that `react-dates` ships with is the [CSS interface](https://github.com/airbnb/react-with-styles-interface-css). If you want to use this interface along with the theme registration method, you will need to rebuild the core `_datepicker.css` file. We do not currently expose a utility method to build this file, but you can follow along with the code in https://github.com/airbnb/react-dates/blob/master/scripts/buildCSS.js to build your own custom themed CSS file.
 
 [package-url]: https://npmjs.org/package/react-dates
 [npm-version-svg]: http://versionbadg.es/airbnb/react-dates.svg

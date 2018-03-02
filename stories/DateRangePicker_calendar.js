@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { storiesOf } from '@storybook/react';
 
-import { VERTICAL_ORIENTATION, ANCHOR_RIGHT, OPEN_UP } from '../constants';
+import { VERTICAL_ORIENTATION, ANCHOR_RIGHT, OPEN_UP } from '../src/constants';
 
 import DateRangePickerWrapper from '../examples/DateRangePickerWrapper';
 
@@ -36,7 +36,6 @@ const TestCustomInfoPanel = () => (
   <div
     style={{
       padding: '10px 21px',
-      borderTop: '1px solid #dce0e0',
       color: '#484848',
     }}
   >
@@ -130,8 +129,44 @@ storiesOf('DRP - Calendar Props', module)
       autoFocus
     />
   ))
-  .addWithInfo('with info panel', () => (
+  .addWithInfo('with info panel default', () => (
     <DateRangePickerWrapper
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel before', () => (
+    <DateRangePickerWrapper
+      calendarInfoPosition="before"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel after', () => (
+    <DateRangePickerWrapper
+      calendarInfoPosition="after"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel bottom', () => (
+    <DateRangePickerWrapper
+      calendarInfoPosition="bottom"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel top', () => (
+    <DateRangePickerWrapper
+      calendarInfoPosition="top"
       renderCalendarInfo={() => (
         <TestCustomInfoPanel />
       )}
@@ -165,4 +200,23 @@ storiesOf('DRP - Calendar Props', module)
       firstDayOfWeek={3}
       autoFocus
     />
+  ))
+  .addWithInfo('with onClose handler', () => (
+    <DateRangePickerWrapper
+      onClose={({ startDate, endDate }) => alert(`onClose: startDate = ${startDate}, endDate = ${endDate}`)}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with no animation', () => (
+    <DateRangePickerWrapper
+      transitionDuration={0}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with custom vertical spacing', () => (
+    <DateRangePickerWrapper
+      verticalSpacing={0}
+      autoFocus
+    />
   ));
+

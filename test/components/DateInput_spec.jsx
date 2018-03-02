@@ -16,28 +16,20 @@ describe('DateInput', () => {
         expect(wrapper.find('input').props()['aria-label']).to.equal(placeholder);
       });
 
-      it('has value === props.inputValue if prop is passed in', () => {
-        const INPUT_VALUE = 'foobar';
-        const wrapper = shallow(<DateInput id="date" inputValue={INPUT_VALUE} />).dive();
-        expect(wrapper.find('input').props().value).to.equal(INPUT_VALUE);
-      });
-
-      it('has value === props.displayValue if inputValue is not passed in', () => {
+      it('has value === props.displayValue', () => {
         const DISPLAY_VALUE = 'foobar';
         const wrapper = shallow(<DateInput id="date" displayValue={DISPLAY_VALUE} />).dive();
         expect(wrapper.find('input').props().value).to.equal(DISPLAY_VALUE);
       });
 
-      it('has value === state.dateString if neither inputValue or displayValue are passed in',
-        () => {
-          const DATE_STRING = 'foobar';
-          const wrapper = shallow(<DateInput id="date" />).dive();
-          wrapper.setState({
-            dateString: DATE_STRING,
-          });
-          expect(wrapper.find('input').props().value).to.equal(DATE_STRING);
-        },
-      );
+      it('has value === state.dateString if displayValue is not passed in', () => {
+        const DATE_STRING = 'foobar';
+        const wrapper = shallow(<DateInput id="date" />).dive();
+        wrapper.setState({
+          dateString: DATE_STRING,
+        });
+        expect(wrapper.find('input').props().value).to.equal(DATE_STRING);
+      });
 
       describe('props.readOnly is truthy', () => {
         it('sets readOnly', () => {
@@ -46,7 +38,7 @@ describe('DateInput', () => {
         });
       });
 
-      describe('props.readOnly is falsey', () => {
+      describe('props.readOnly is falsy', () => {
         it('does not set readOnly', () => {
           const wrapper = shallow(<DateInput id="date" readOnly={false} />).dive();
           expect(!!wrapper.find('input').prop('readOnly')).to.equal(false);
@@ -63,8 +55,9 @@ describe('DateInput', () => {
 
       describe('props.screenReaderMessage is truthy', () => {
         beforeEach(() => {
-          wrapper =
-            shallow(<DateInput id={inputId} screenReaderMessage={screenReaderMessage} />).dive();
+          wrapper = shallow((
+            <DateInput id={inputId} screenReaderMessage={screenReaderMessage} />
+          )).dive();
         });
 
         it('has #DateInput__screen-reader-message id', () => {
@@ -80,7 +73,7 @@ describe('DateInput', () => {
         });
       });
 
-      describe('props.screenReaderMessage is falsey', () => {
+      describe('props.screenReaderMessage is falsy', () => {
         beforeEach(() => {
           wrapper = shallow(<DateInput id={inputId} />).dive();
         });
@@ -92,6 +85,28 @@ describe('DateInput', () => {
         it('does not have aria-describedby attribute value', () => {
           expect(wrapper.find(`input[aria-describedby="${screenReaderMessageId}"]`)).to.have.lengthOf(0);
         });
+      });
+    });
+  });
+
+  describe('#componentWillReceiveProps', () => {
+    describe('nextProps.displayValue exists', () => {
+      it('sets state.dateString to \'\'', () => {
+        const dateString = 'foo123';
+        const wrapper = shallow(<DateInput id="date" />).dive();
+        wrapper.setState({ dateString });
+        wrapper.instance().componentWillReceiveProps({ displayValue: '1991-07-13' });
+        expect(wrapper.state()).to.have.property('dateString', '');
+      });
+    });
+
+    describe('nextProps.displayValue does not exist', () => {
+      it('does not change state.dateString', () => {
+        const dateString = 'foo123';
+        const wrapper = shallow(<DateInput id="date" />).dive();
+        wrapper.setState({ dateString });
+        wrapper.instance().componentWillReceiveProps({ displayValue: null });
+        expect(wrapper.state()).to.have.property('dateString', dateString);
       });
     });
   });
@@ -120,12 +135,12 @@ describe('DateInput', () => {
 
     it('calls props.onKeyDownQuestionMark if last typed character is ?', () => {
       const onKeyDownQuestionMarkStub = sinon.stub();
-      const wrapper = shallow(
+      const wrapper = shallow((
         <DateInput
           id="date"
           onKeyDownQuestionMark={onKeyDownQuestionMarkStub}
-        />,
-      ).dive();
+        />
+      )).dive();
       wrapper.instance().onChange({ target: { value: 'foobar?' } });
       expect(onKeyDownQuestionMarkStub.callCount).to.equal(1);
     });
@@ -141,8 +156,9 @@ describe('DateInput', () => {
 
     it('calls props.onKeyDownShiftTab if e.key === `Tab` and e.shiftKey === true', () => {
       const onKeyDownShiftTabStub = sinon.stub();
-      const wrapper =
-        shallow(<DateInput id="date" onKeyDownShiftTab={onKeyDownShiftTabStub} />).dive();
+      const wrapper = shallow((
+        <DateInput id="date" onKeyDownShiftTab={onKeyDownShiftTabStub} />
+      )).dive();
       wrapper.instance().onKeyDown({ ...event, key: 'Tab', shiftKey: true });
       expect(onKeyDownShiftTabStub.callCount).to.equal(1);
     });
@@ -156,34 +172,36 @@ describe('DateInput', () => {
 
     it('calls props.onKeyDownArrowDown if e.key === `ArrowDown`', () => {
       const onKeyDownArrowDownStub = sinon.stub();
-      const wrapper =
-        shallow(<DateInput id="date" onKeyDownArrowDown={onKeyDownArrowDownStub} />).dive();
+      const wrapper = shallow((
+        <DateInput id="date" onKeyDownArrowDown={onKeyDownArrowDownStub} />
+      )).dive();
       wrapper.instance().onKeyDown({ ...event, key: 'ArrowDown' });
       expect(onKeyDownArrowDownStub.callCount).to.equal(1);
     });
 
     it('does not call props.onKeyDownArrowDown if e.key !== `ArrowDown`', () => {
       const onKeyDownArrowDownStub = sinon.stub();
-      const wrapper =
-        shallow(<DateInput id="date" onKeyDownArrowDown={onKeyDownArrowDownStub} />).dive();
+      const wrapper = shallow((
+        <DateInput id="date" onKeyDownArrowDown={onKeyDownArrowDownStub} />
+      )).dive();
       wrapper.instance().onKeyDown({ ...event, key: 'foo' });
       expect(onKeyDownArrowDownStub.callCount).to.equal(0);
     });
 
     it('calls props.onKeyDownQuestionMark if e.key === `?`', () => {
       const onKeyDownQuestionMarkStub = sinon.stub();
-      const wrapper = shallow(
-        <DateInput id="date" onKeyDownQuestionMark={onKeyDownQuestionMarkStub} />,
-      ).dive();
+      const wrapper = shallow((
+        <DateInput id="date" onKeyDownQuestionMark={onKeyDownQuestionMarkStub} />
+      )).dive();
       wrapper.instance().onKeyDown({ ...event, key: '?' });
       expect(onKeyDownQuestionMarkStub.callCount).to.equal(1);
     });
 
     it('does not call props.onKeyDownQuestionMark if e.key !== `?`', () => {
       const onKeyDownQuestionMarkStub = sinon.stub();
-      const wrapper = shallow(
-        <DateInput id="date" onKeyDownQuestionMark={onKeyDownQuestionMarkStub} />,
-      ).dive();
+      const wrapper = shallow((
+        <DateInput id="date" onKeyDownQuestionMark={onKeyDownQuestionMarkStub} />
+      )).dive();
       wrapper.instance().onKeyDown({ ...event, key: 'foo' });
       expect(onKeyDownQuestionMarkStub.callCount).to.equal(0);
     });
@@ -213,20 +231,18 @@ describe('DateInput', () => {
       const el = {
         blur() {},
         focus() {},
-        select() {},
       };
 
       beforeEach(() => {
         sinon.spy(el, 'blur');
         sinon.spy(el, 'focus');
-        sinon.spy(el, 'select');
       });
 
       afterEach(() => {
         sinon.restore();
       });
 
-      it('focuses and selects inputRef when becoming focused', () => {
+      it('focuses inputRef when becoming focused', () => {
         const wrapper = shallow(
           <DateInput id="date" focused={false} isFocused={false} />,
           { disableLifecycleMethods: false },
@@ -238,7 +254,6 @@ describe('DateInput', () => {
 
         expect(el.blur).to.have.property('callCount', 0);
         expect(el.focus).to.have.property('callCount', 1);
-        expect(el.select).to.have.property('callCount', 1);
       });
 
       it('blurs when becoming unfocused', () => {
@@ -253,7 +268,6 @@ describe('DateInput', () => {
 
         expect(el.blur).to.have.property('callCount', 1);
         expect(el.focus).to.have.property('callCount', 0);
-        expect(el.select).to.have.property('callCount', 0);
       });
     });
 

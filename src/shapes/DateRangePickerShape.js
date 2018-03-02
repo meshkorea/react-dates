@@ -11,6 +11,7 @@ import OrientationShape from '../shapes/OrientationShape';
 import anchorDirectionShape from '../shapes/AnchorDirectionShape';
 import openDirectionShape from '../shapes/OpenDirectionShape';
 import DayOfWeekShape from '../shapes/DayOfWeekShape';
+import CalendarInfoPositionShape from '../shapes/CalendarInfoPositionShape';
 
 export default {
   // required props for a functional interactive DateRangePicker
@@ -38,6 +39,11 @@ export default {
   customInputIcon: PropTypes.node,
   customArrowIcon: PropTypes.node,
   customCloseIcon: PropTypes.node,
+  noBorder: PropTypes.bool,
+  block: PropTypes.bool,
+  small: PropTypes.bool,
+  regular: PropTypes.bool,
+  keepFocusOnInput: PropTypes.bool,
 
   // calendar presentation and interaction related props
   renderMonth: PropTypes.func,
@@ -55,7 +61,11 @@ export default {
   keepOpenOnDateSelect: PropTypes.bool,
   reopenPickerOnClearDates: PropTypes.bool,
   renderCalendarInfo: PropTypes.func,
+  calendarInfoPosition: CalendarInfoPositionShape,
   hideKeyboardShortcutsPanel: PropTypes.bool,
+  verticalHeight: nonNegativeInteger,
+  transitionDuration: nonNegativeInteger,
+  verticalSpacing: nonNegativeInteger,
 
   // navigation related props
   navPrev: PropTypes.node,
@@ -64,7 +74,8 @@ export default {
   onNextMonthClick: PropTypes.func,
 
   // day presentation and interaction related props
-  renderDay: PropTypes.func,
+  renderCalendarDay: PropTypes.func,
+  renderDayContents: PropTypes.func,
   minimumNights: PropTypes.number,
   enableOutsideDays: PropTypes.bool,
   isDayBlocked: PropTypes.func,

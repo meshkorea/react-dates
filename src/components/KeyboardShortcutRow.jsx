@@ -15,7 +15,13 @@ const defaultProps = {
   block: false,
 };
 
-function KeyboardShortcutRow({ unicode, label, action, block, styles }) {
+function KeyboardShortcutRow({
+  unicode,
+  label,
+  action,
+  block,
+  styles,
+}) {
   return (
     <li
       {...css(
@@ -32,7 +38,7 @@ function KeyboardShortcutRow({ unicode, label, action, block, styles }) {
         <span
           {...css(styles.KeyboardShortcutRow_key)}
           role="img"
-          aria-label={label}
+          aria-label={`${label},`} // add comma so screen readers will pause before reading action
         >
           {unicode}
         </span>
@@ -66,7 +72,6 @@ export default withStyles(({ reactDates: { color } }) => ({
   },
 
   KeyboardShortcutRow_keyContainer__block: {
-    width: 'auto',
     textAlign: 'left',
     display: 'inline',
   },

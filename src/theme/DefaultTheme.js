@@ -9,6 +9,7 @@ const core = {
   border: '#dbdbdb',
   borderLight: '#e4e7e7',
   borderLighter: '#eceeee',
+  borderBright: '#f4f5f5',
 
   primary: '#00a699',
   primaryShade_1: '#33dacd',
@@ -26,15 +27,32 @@ const core = {
 export default {
   reactDates: {
     zIndex: 0,
+    border: {
+      input: {
+        border: 0,
+        borderTop: 0,
+        borderRight: 0,
+        borderBottom: '2px solid transparent',
+        borderLeft: 0,
+        outlineFocused: 0,
+        borderFocused: 0,
+        borderTopFocused: 0,
+        borderLeftFocused: 0,
+        borderBottomFocused: `2px solid ${core.primary_dark}`,
+        borderRightFocused: 0,
+      },
+    },
+
     color: {
       core,
 
-      disabled: core.grayLighter,
+      disabled: core.grayLightest,
 
       background: core.white,
       backgroundDark: '#f2f2f2',
-      backgroundFocused: '#99ede6',
+      backgroundFocused: core.white,
       text: core.gray,
+      textDisabled: core.border,
       textFocused: '#007a87',
       placeholderText: '#757575',
 
@@ -130,16 +148,26 @@ export default {
     spacing: {
       captionPaddingTop: 22,
       captionPaddingBottom: 37,
-      inputPadding: 8,
-      inputMarginBottom: 72, // spacing in between the input and the picker
-      displayTextPaddingVertical: 4,
-      displayTextPaddingHorizontal: 8,
+      inputPadding: 0,
+      displayTextPaddingVertical: undefined,
+      displayTextPaddingTop: 13,
+      displayTextPaddingBottom: 11,
+      displayTextPaddingHorizontal: undefined,
+      displayTextPaddingLeft: 12,
+      displayTextPaddingRight: 12,
+      displayTextPaddingVertical_small: undefined,
+      displayTextPaddingTop_small: 8,
+      displayTextPaddingBottom_small: 6,
+      displayTextPaddingHorizontal_small: undefined,
+      displayTextPaddingLeft_small: 8,
+      displayTextPaddingRight_small: 8,
     },
 
     sizing: {
       inputWidth: 130,
-      tooltipArrowWidth: 20,
+      inputWidth_small: 90,
       arrowWidth: 24,
+      arrowWidth_small: 19,
     },
 
     font: {
@@ -148,6 +176,9 @@ export default {
       input: {
         size: 18,
         lineHeight: '24px',
+        size_small: 14,
+        lineHeight_small: '18px',
+        styleDisabled: 'italic',
       },
     },
   },

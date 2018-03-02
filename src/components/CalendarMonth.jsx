@@ -11,6 +11,7 @@ import moment from 'moment';
 import { CalendarDayPhrases } from '../defaultPhrases';
 import getPhrasePropTypes from '../utils/getPhrasePropTypes';
 
+import CalendarWeek from './CalendarWeek';
 import CalendarDay from './CalendarDay';
 
 import calculateDimension from '../utils/calculateDimension';
@@ -26,7 +27,7 @@ import {
   VERTICAL_ORIENTATION,
   VERTICAL_SCROLLABLE,
   DAY_SIZE,
-} from '../../constants';
+} from '../constants';
 
 const propTypes = forbidExtraProps({
   ...withStylesPropTypes,
@@ -40,7 +41,8 @@ const propTypes = forbidExtraProps({
   onDayMouseEnter: PropTypes.func,
   onDayMouseLeave: PropTypes.func,
   renderMonth: PropTypes.func,
-  renderDay: PropTypes.func,
+  renderCalendarDay: PropTypes.func,
+  renderDayContents: PropTypes.func,
   firstDayOfWeek: DayOfWeekShape,
   setMonthHeight: PropTypes.func,
 
@@ -50,6 +52,7 @@ const propTypes = forbidExtraProps({
   // i18n
   monthFormat: PropTypes.string,
   phrases: PropTypes.shape(getPhrasePropTypes(CalendarDayPhrases)),
+  dayAriaLabelFormat: PropTypes.string,
 });
 
 const defaultProps = {
@@ -63,7 +66,8 @@ const defaultProps = {
   onDayMouseEnter() {},
   onDayMouseLeave() {},
   renderMonth: null,
-  renderDay: null,
+  renderCalendarDay: props => (<CalendarDay {...props} />),
+  renderDayContents: null,
   firstDayOfWeek: null,
   setMonthHeight() {},
 
@@ -73,6 +77,7 @@ const defaultProps = {
   // i18n
   monthFormat: 'MMMM YYYY', // english locale
   phrases: CalendarDayPhrases,
+  dayAriaLabelFormat: undefined,
 };
 
 class CalendarMonth extends React.Component {
@@ -148,12 +153,14 @@ class CalendarMonth extends React.Component {
       onDayMouseEnter,
       onDayMouseLeave,
       renderMonth,
-      renderDay,
+      renderCalendarDay,
+      renderDayContents,
       daySize,
       focusedDate,
       isFocused,
       styles,
       phrases,
+      dayAriaLabelFormat,
     } = this.props;
 
     const { weeks } = this.state;
@@ -172,7 +179,6 @@ class CalendarMonth extends React.Component {
         data-visible={isVisible}
       >
         <div
-          id="CalendarMonth__caption"
           ref={this.setCaptionRef}
           {...css(
             styles.CalendarMonth_caption,
@@ -182,27 +188,29 @@ class CalendarMonth extends React.Component {
           <strong>{monthTitle}</strong>
         </div>
 
-        <table {...css(styles.CalendarMonth_table)} role="presentation">
+        <table
+          {...css(styles.CalendarMonth_table)}
+          role="presentation"
+        >
           <tbody ref={this.setGridRef}>
             {weeks.map((week, i) => (
-              <tr key={i}>
-                {week.map((day, dayOfWeek) => (
-                  <CalendarDay
-                    day={day}
-                    daySize={daySize}
-                    isOutsideDay={!day || day.month() !== month.month()}
-                    tabIndex={isVisible && isSameDay(day, focusedDate) ? 0 : -1}
-                    isFocused={isFocused}
-                    key={dayOfWeek}
-                    onDayMouseEnter={onDayMouseEnter}
-                    onDayMouseLeave={onDayMouseLeave}
-                    onDayClick={onDayClick}
-                    renderDay={renderDay}
-                    phrases={phrases}
-                    modifiers={modifiers[toISODateString(day)]}
-                  />
-                ))}
-              </tr>
+              <CalendarWeek key={i}>
+                {week.map((day, dayOfWeek) => renderCalendarDay({
+                  key: dayOfWeek,
+                  day,
+                  daySize,
+                  isOutsideDay: !day || day.month() !== month.month(),
+                  tabIndex: isVisible && isSameDay(day, focusedDate) ? 0 : -1,
+                  isFocused,
+                  onDayMouseEnter,
+                  onDayMouseLeave,
+                  onDayClick,
+                  renderDayContents,
+                  phrases,
+                  modifiers: modifiers[toISODateString(day)],
+                  ariaLabelFormat: dayAriaLabelFormat,
+                }))}
+              </CalendarWeek>
             ))}
           </tbody>
         </table>

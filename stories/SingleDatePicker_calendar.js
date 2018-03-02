@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 
 import SingleDatePickerWrapper from '../examples/SingleDatePickerWrapper';
 
-import { VERTICAL_ORIENTATION, ANCHOR_RIGHT, OPEN_UP } from '../constants';
+import { VERTICAL_ORIENTATION, ANCHOR_RIGHT, OPEN_UP } from '../src/constants';
 
 const TestPrevIcon = () => (
   <span
@@ -36,7 +36,6 @@ const TestCustomInfoPanel = () => (
   <div
     style={{
       padding: '10px 21px',
-      borderTop: '1px solid #dce0e0',
       color: '#484848',
     }}
   >
@@ -85,6 +84,16 @@ storiesOf('SDP - Calendar Props', module)
       autoFocus
     />
   ))
+  .addWithInfo('horizontal with portal and info panel', () => (
+    <SingleDatePickerWrapper
+      withPortal
+      autoFocus
+      calendarInfoPosition="after"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+    />
+  ))
   .addWithInfo('horizontal with fullscreen portal', () => (
     <SingleDatePickerWrapper withFullScreenPortal autoFocus />
   ))
@@ -121,8 +130,44 @@ storiesOf('SDP - Calendar Props', module)
       autoFocus
     />
   ))
-  .addWithInfo('with info panel', () => (
+  .addWithInfo('with info panel default', () => (
     <SingleDatePickerWrapper
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel borderPosition='borderBottom'/>
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel before', () => (
+    <SingleDatePickerWrapper
+      calendarInfoPosition="before"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel after', () => (
+    <SingleDatePickerWrapper
+      calendarInfoPosition="after"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel bottom', () => (
+    <SingleDatePickerWrapper
+      calendarInfoPosition="bottom"
+      renderCalendarInfo={() => (
+        <TestCustomInfoPanel />
+      )}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with info panel top', () => (
+    <SingleDatePickerWrapper
+      calendarInfoPosition="top"
       renderCalendarInfo={() => (
         <TestCustomInfoPanel />
       )}
@@ -144,6 +189,24 @@ storiesOf('SDP - Calendar Props', module)
   .addWithInfo('with custom first day of week', () => (
     <SingleDatePickerWrapper
       firstDayOfWeek={3}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with onClose handler', () => (
+    <SingleDatePickerWrapper
+      onClose={({ date }) => alert(`onClose: date = ${date}`)}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with no animation', () => (
+    <SingleDatePickerWrapper
+      transitionDuration={0}
+      autoFocus
+    />
+  ))
+  .addWithInfo('with custom vertical spacing', () => (
+    <SingleDatePickerWrapper
+      verticalSpacing={0}
       autoFocus
     />
   ));

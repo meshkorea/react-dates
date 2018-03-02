@@ -14,7 +14,7 @@ import {
   HORIZONTAL_ORIENTATION,
   VERTICAL_ORIENTATION,
   VERTICAL_SCROLLABLE,
-} from '../../constants';
+} from '../../src/constants';
 
 const today = moment();
 const event = { preventDefault() {}, stopPropagation() {} };
@@ -42,9 +42,9 @@ describe('DayPicker', () => {
       describe('props.orientation === HORIZONTAL_ORIENTATION', () => {
         it('props.numberOfMonths ul (week header) elements exists', () => {
           const NUM_OF_MONTHS = 3;
-          const wrapper = shallow(
-            <DayPicker orientation={HORIZONTAL_ORIENTATION} numberOfMonths={NUM_OF_MONTHS} />,
-          ).dive();
+          const wrapper = shallow((
+            <DayPicker orientation={HORIZONTAL_ORIENTATION} numberOfMonths={NUM_OF_MONTHS} />
+          )).dive();
           expect(wrapper.find('ul')).to.have.lengthOf(NUM_OF_MONTHS);
         });
       });
@@ -80,7 +80,7 @@ describe('DayPicker', () => {
           expect(CalendarMonthGridComponent.prop('isAnimating')).to.equal(true);
         });
 
-        it('is false if state.monthTransition is falsey', () => {
+        it('is false if state.monthTransition is falsy', () => {
           const wrapper = shallow(<DayPicker />).dive();
           wrapper.setState({ monthTransition: null });
           const CalendarMonthGridComponent = wrapper.find(CalendarMonthGrid);
@@ -400,7 +400,7 @@ describe('DayPicker', () => {
       });
     });
 
-    describe('focusedDate is falsey', () => {
+    describe('focusedDate is falsy', () => {
       it('does not call maybeTransitionPrevMonth', () => {
         const maybeTransitionPrevMonthSpy = sinon.spy(PureDayPicker.prototype, 'maybeTransitionPrevMonth');
         const wrapper = shallow(<DayPicker />).dive();
@@ -457,8 +457,9 @@ describe('DayPicker', () => {
     describe('props.getFirstFocusableDay is truthy', () => {
       it('calls getFirstFocusableDay with arg if exists', () => {
         const getFirstFocusableDayStub = sinon.stub();
-        const wrapper =
-          shallow(<DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />).dive();
+        const wrapper = shallow((
+          <DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />
+        )).dive();
         getFirstFocusableDayStub.reset(); // getFirstFocusableDay gets called in the constructor
 
         wrapper.instance().getFocusedDay();
@@ -467,8 +468,9 @@ describe('DayPicker', () => {
 
       it('calls getFirstFocusableDay with arg if exists', () => {
         const getFirstFocusableDayStub = sinon.stub();
-        const wrapper =
-        shallow(<DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />).dive();
+        const wrapper = shallow((
+          <DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />
+        )).dive();
         getFirstFocusableDayStub.reset(); // getFirstFocusableDay gets called in the constructor
 
         wrapper.instance().getFocusedDay(today);
@@ -477,8 +479,9 @@ describe('DayPicker', () => {
 
       it('returns getFirstFocusableDay() value', () => {
         const getFirstFocusableDayStub = sinon.stub().returns(today);
-        const wrapper =
-          shallow(<DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />).dive();
+        const wrapper = shallow((
+          <DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />
+        )).dive();
         expect(wrapper.instance().getFocusedDay().isSame(today, 'day')).to.equal(true);
       });
 
@@ -486,13 +489,14 @@ describe('DayPicker', () => {
         const test = moment().add(3, 'months');
         const getFirstFocusableDayStub = sinon.stub().returns(today);
         sinon.stub(isDayVisible, 'default').returns(false);
-        const wrapper =
-          shallow(<DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />).dive();
+        const wrapper = shallow((
+          <DayPicker getFirstFocusableDay={getFirstFocusableDayStub} />
+        )).dive();
         expect(wrapper.instance().getFocusedDay(test).isSame(test.startOf('month'), 'day')).to.equal(true);
       });
     });
 
-    describe('props.getFirstFocusableDay is falsey', () => {
+    describe('props.getFirstFocusableDay is falsy', () => {
       it('returns undefined if no arg', () => {
         const wrapper = shallow(<DayPicker />).dive();
         expect(wrapper.instance().getFocusedDay()).to.equal(undefined);
@@ -737,7 +741,7 @@ describe('DayPicker', () => {
           expect(adjustDayPickerHeightSpy).to.have.property('callCount', 2);
         });
 
-        it('does not call adjustDayPickerHeight if state.monthTransition is falsey', () => {
+        it('does not call adjustDayPickerHeight if state.monthTransition is falsy', () => {
           const wrapper = mount(<DayPicker orientation={HORIZONTAL_ORIENTATION} />);
           wrapper.setState({
             monthTransition: null,
@@ -753,7 +757,7 @@ describe('DayPicker', () => {
           expect(updateStateAfterMonthTransitionSpy).to.have.property('callCount', 1);
         });
 
-        it('does not call updateStateAfterMonthTransition if state.monthTransition is falsey', () => {
+        it('does not call updateStateAfterMonthTransition if state.monthTransition is falsy', () => {
           const wrapper = mount(<DayPicker orientation={HORIZONTAL_ORIENTATION} />);
           wrapper.setState({
             monthTransition: null,
@@ -771,7 +775,7 @@ describe('DayPicker', () => {
           expect(adjustDayPickerHeightSpy.called).to.equal(false);
         });
 
-        it('does not call adjustDayPickerHeight if state.monthTransition is falsey', () => {
+        it('does not call adjustDayPickerHeight if state.monthTransition is falsy', () => {
           const wrapper = mount(<DayPicker orientation={VERTICAL_ORIENTATION} />);
           wrapper.setState({
             monthTransition: null,
@@ -787,12 +791,52 @@ describe('DayPicker', () => {
           expect(updateStateAfterMonthTransitionSpy).to.have.property('callCount', 1);
         });
 
-        it('does not call updateStateAfterMonthTransition if state.monthTransition is falsey', () => {
+        it('does not call updateStateAfterMonthTransition if state.monthTransition is falsy', () => {
           const wrapper = mount(<DayPicker orientation={VERTICAL_ORIENTATION} />);
           wrapper.setState({
             monthTransition: null,
           });
           expect(updateStateAfterMonthTransitionSpy.calledOnce).to.equal(false);
+        });
+      });
+
+      describe('when isFocused is updated to true', () => {
+        const prevProps = { isFocused: false };
+        const newProps = { isFocused: true };
+
+        let containerFocusStub;
+        let wrapper;
+
+        beforeEach(() => {
+          containerFocusStub = sinon.stub();
+          wrapper = shallow(<DayPicker {...newProps} />).dive();
+          wrapper.instance().container = { focus: containerFocusStub };
+        });
+
+        afterEach(() => {
+          containerFocusStub.reset();
+        });
+
+        describe('when focusedDate is not defined', () => {
+          before(() => {
+            wrapper.state().focusedDate = undefined;
+            wrapper.instance().componentDidUpdate(prevProps);
+          });
+
+          it('sets focus on the container', () => {
+            expect(containerFocusStub.callCount).to.equal(1);
+          });
+        });
+
+        describe('when focusedDate is defined', () => {
+          before(() => {
+            wrapper.state().focusedDate = moment();
+            wrapper.instance().componentDidUpdate(prevProps);
+          });
+
+          it('should not set focus on the container', () => {
+            expect(containerFocusStub.notCalled).to.equal(true);
+          });
         });
       });
     });
