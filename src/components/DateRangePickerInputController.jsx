@@ -149,6 +149,7 @@ export default class DateRangePickerInputController extends React.Component {
         startDate,
         endDate: undefined,
       });
+      return;
     }
 
     const endDate = toMomentObject(endDateString, this.getDisplayFormat());
@@ -191,6 +192,7 @@ export default class DateRangePickerInputController extends React.Component {
           startDate: undefined,
           endDate,
         });
+        return;
       }
       if (startDate && isBeforeDay(endDate, startDate.clone().add(minimumNights, 'days'))) {
         endDate = null;

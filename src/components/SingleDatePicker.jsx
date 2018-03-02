@@ -166,6 +166,7 @@ class SingleDatePicker extends React.Component {
 
     if (!dateString) {
       onDateChange(undefined);
+      return;
     }
 
     const isValid = newDate && !isOutsideRange(newDate);
