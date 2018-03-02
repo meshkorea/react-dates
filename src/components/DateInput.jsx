@@ -106,8 +106,16 @@ class DateInput extends React.Component {
     if (dateString[dateString.length - 1] === '?') {
       onKeyDownQuestionMark(e);
     } else {
-      this.setState({ dateString });
-      onChange(dateString);
+      const escaped = dateString.replace(/\D/g, '');
+      const formattedString = [
+        escaped.substr(0, 4),
+        escaped.substr(4, 2),
+        escaped.substr(6, 2),
+      ]
+        .filter(x => x)
+        .join('-');
+      this.setState({ dateString: formattedString });
+      onChange(formattedString);
     }
   }
 
