@@ -141,6 +141,8 @@ class DateInput extends React.Component {
     } else if (key === '?') {
       e.preventDefault();
       onKeyDownQuestionMark(e);
+    } else if (key === 'ArrowLeft') {
+      e.preventDefault();
     }
   }
 
