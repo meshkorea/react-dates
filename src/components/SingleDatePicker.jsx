@@ -41,7 +41,7 @@ const propTypes = forbidExtraProps({
 
 const defaultProps = {
   // required props for a functional interactive SingleDatePicker
-  date: null,
+  date: undefined,
   focused: false,
 
   // input related props

@@ -41,8 +41,8 @@ const propTypes = forbidExtraProps({
 
 const defaultProps = {
   // required props for a functional interactive DateRangePicker
-  startDate: null,
-  endDate: null,
+  startDate: undefined,
+  endDate: undefined,
   focusedInput: null,
 
   // input related props
