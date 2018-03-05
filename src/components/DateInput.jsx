@@ -120,6 +120,19 @@ class DateInput extends React.Component {
   }
 
   onKeyDown(e) {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    throttle(this.handleOnKeydown, 300);
+  }
+
+  setInputRef(ref) {
+    this.inputRef = ref;
+  }
+
+  handleOnKeydown(e) {
     e.stopPropagation();
 
     const {
@@ -141,13 +154,7 @@ class DateInput extends React.Component {
     } else if (key === '?') {
       e.preventDefault();
       onKeyDownQuestionMark(e);
-    } else if (key === 'ArrowLeft') {
-      e.preventDefault();
     }
-  }
-
-  setInputRef(ref) {
-    this.inputRef = ref;
   }
 
   render() {
@@ -199,7 +206,7 @@ class DateInput extends React.Component {
           ref={this.setInputRef}
           value={value}
           onChange={this.onChange}
-          onKeyDown={throttle(this.onKeyDown, 300)}
+          onKeyDown={this.onKeyDown}
           onFocus={onFocus}
           placeholder={placeholder}
           autoComplete="off"
