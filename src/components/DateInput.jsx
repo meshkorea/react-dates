@@ -91,7 +91,6 @@ class DateInput extends React.Component {
 
     if (focused && isFocused) {
       this.inputRef.focus();
-      this.inputRef.select();
     } else {
       this.inputRef.blur();
     }
@@ -129,9 +128,8 @@ class DateInput extends React.Component {
     throttle(this.handleOnKeydown, 300);
   }
 
-  onDoubleClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  onDoubleClick() {
+    window.getSelection().collapseToEnd();
   }
 
   setInputRef(ref) {
