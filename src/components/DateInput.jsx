@@ -69,6 +69,7 @@ class DateInput extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onDoubleClick = this.onDoubleClick.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
   }
 
@@ -126,6 +127,11 @@ class DateInput extends React.Component {
     }
 
     throttle(this.handleOnKeydown, 300);
+  }
+
+  onDoubleClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   setInputRef(ref) {
@@ -207,6 +213,7 @@ class DateInput extends React.Component {
           value={value}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
+          onDoubleClick={this.onDoubleClick}
           onFocus={onFocus}
           placeholder={placeholder}
           autoComplete="off"
