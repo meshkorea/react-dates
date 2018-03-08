@@ -195,7 +195,7 @@ export default class DateRangePickerInputController extends React.Component {
         return;
       }
       if (startDate && isBeforeDay(endDate, startDate.clone().add(minimumNights, 'days'))) {
-        endDate = null;
+        endDate = undefined;
       }
 
       onDatesChange({ startDate, endDate });
