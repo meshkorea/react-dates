@@ -70,12 +70,12 @@ const propTypes = forbidExtraProps({
 });
 
 const defaultProps = {
-  startDate: null,
+  startDate: undefined,
   startDateId: START_DATE,
   startDatePlaceholderText: 'Start Date',
   isStartDateFocused: false,
 
-  endDate: null,
+  endDate: undefined,
   endDateId: END_DATE,
   endDatePlaceholderText: 'End Date',
   isEndDateFocused: false,
