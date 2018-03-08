@@ -160,13 +160,6 @@ export default class DateRangePickerInputController extends React.Component {
       onDatesChange({ startDate, endDate });
       if (!keepOpenOnDateSelect) this.onClearFocus();
     } else {
-      if (!endDateString) {
-        onDatesChange({
-          startDate,
-          endDate: undefined,
-        });
-        return;
-      }
       onDatesChange({
         startDate,
         endDate: null,
@@ -193,6 +186,13 @@ export default class DateRangePickerInputController extends React.Component {
     let { endDate } = this.props;
     const { isOutsideRange, minimumNights, onDatesChange, onFocusChange } = this.props;
     const isStartDateValid = startDate && !isOutsideRange(startDate);
+    if (!startDateString) {
+      onDatesChange({
+        startDate: undefined,
+        endDate,
+      });
+      return;
+    }
     if (isStartDateValid) {
       if (startDate && isBeforeDay(endDate, startDate.clone().add(minimumNights, 'days'))) {
         endDate = undefined;
@@ -201,13 +201,6 @@ export default class DateRangePickerInputController extends React.Component {
       onDatesChange({ startDate, endDate });
       onFocusChange(END_DATE);
     } else {
-      if (!startDateString) {
-        onDatesChange({
-          startDate: undefined,
-          endDate,
-        });
-        return;
-      }
       onDatesChange({
         startDate: null,
         endDate,
